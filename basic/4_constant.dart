@@ -8,16 +8,18 @@
  */
 // Final and constant
 void main() {
-  ExampleFinal a = new ExampleFinal();
+  ExampleFinal a = new ExampleFinal(7);
   ExampleFinal2 b = new ExampleFinal2();
   ExampleConst1 exampleConst1 = new ExampleConst1();
   ExampleConst2 exampleConst2 = new ExampleConst2();
 }
 
 class ExampleFinal {
+  static final c = DateTime.now();
   // static const a = 5;
   final a = 5;
-  ExampleFinal() {
+  final b;
+  ExampleFinal(this.b) {
     const a = 6;
     print("value of a is ${a}");
     // a = 6;
@@ -56,11 +58,24 @@ class ExampleConst2 {
     // Uncommenting below line will give error. Because we can't able to do any operation of a constant variable with a normal variable
     // const d = 85 * c;
 
-    // Confusing. In documentation it's mentioned different.
+    // Variable contains constant values. So we can able to assign multiple values.
     var e = const[];
     e = [5, 6, 7, 8];
     e = [6, 7, 7, 8, 9];
     print(e);
+
+    // Variable mentioned as final which contains const values. So we can't able to assign a 
+    // different value to a final variable.
+    final e1 = const[];
+    // Below comment line is fine. Because are initializing there itself.
+    // final e1 = const[5, 6];
+    // Uncommenting below line will give error. Because e1 is mentioned as final.
+    // e1 = [5, 6];
+
+    // Variable mentioned as e2 
+    const e2 = const[];
+    // Uncommenting below line will give error. It's similar as e1.
+    // e2 = [5, 6, 7];
 
     const f = [5, 7, 8, 6];
     // Uncommenting below line will give error. Because we initialized f as const. So we can't able to change the value.
@@ -79,15 +94,38 @@ class ExampleConst2 {
 
     const immutableList = [
       ImmutableExample(5, 6),
-      ImmutableExample(7, 8)
+      ImmutableExample(7, 8),
+      // Uncommenting below line will give error. Because we can't able to assign a non const class
+      // MutableExample(9, 10)
+    ];
+
+    var immutableList1 = const[
+      ImmutableExample(6, 9)
+    ];
+    immutableList1 = const[
+      ImmutableExample(9, 10),
+      ImmutableExample(11, 12)
+    ];
+
+    const ImmutableExample2 = const [
+      ImmutableExample(9, 10),
+      ImmutableExample(11, 12),
+      5.6
     ];
 
     for (var i = 0;i < immutableList.length;i++) {
       print(immutableList[i].doSomething());
     }
 
-    const immutableObject = ImmutableExample(6, 8);
+    ImmutableExample immutableObject = const ImmutableExample(6, 8);
+    immutableObject = const ImmutableExample(9, 10);
     print(immutableObject.doSomething());
+
+    final mutableList = [
+      ImmutableExample(10, 15),
+      MutableExample(20, 25),
+      5.67
+    ];
   }
 }
 
@@ -100,5 +138,16 @@ class ImmutableExample {
 
   doSomething() {
     return a + b;
+  }
+}
+
+class MutableExample {
+  var a;
+  var b;
+  MutableExample(this.a, this.b);
+
+  void updateValue(var a, var b) {
+    this.a = a;
+    this.b = b;
   }
 }
